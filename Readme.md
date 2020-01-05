@@ -41,3 +41,13 @@ shortestPath(int source, int destination): This method will return a list of nod
 TSP(List<Integer> targets): This method finds the shortest route that visits all the given target list nodes.
 
 copy(): This method will create a copied algo_graph object for (this) graph_algo.
+
+Class: Graph_GUI.
+
+Methods: 
+
+init(String name): This method will initiate and paint a graph by a given txt file.
+
+paintGraph(): This method will draw a graph using the java class StdDraw.
+
+paint Edges,Nodes,Canvas methods will draw the elements on the graph & the canvas using the methods & abilities StdDraw has given to us.

@@ -12,24 +12,24 @@ import java.util.concurrent.ArrayBlockingQueue;
 import dataStructure.edge_data;
 import dataStructure.graph;
 import dataStructure.node_data;
+import elements.Node;
 import dataStructure.DGraph;
-import dataStructure.Node;
 public class Graph_Algo implements graph_algorithms,Serializable
 {
 	private static final long serialVersionUID = 1L;
-	public graph graph;
+	public graph _graph;
 	public Graph_Algo() 
 	{
-		graph = new DGraph();
+		_graph = new DGraph();
 	}
 	public Graph_Algo(graph other) 
 	{
-		this.graph = other;
+		this._graph = other;
 	}
 	@Override
 	public void init(graph g)
 	{
-		this.graph = (DGraph)g;
+		this._graph = (DGraph)g;
 	}
 	@Override
 	public void init(String file_name) 
@@ -38,7 +38,7 @@ public class Graph_Algo implements graph_algorithms,Serializable
 		{    
 			FileInputStream file = new FileInputStream(file_name); 
 			ObjectInputStream input = new ObjectInputStream(file); 
-			graph = (DGraph) input.readObject(); 
+			_graph = (DGraph) input.readObject(); 
 			input.close(); 
 			file.close(); 
 		} 
@@ -59,7 +59,7 @@ public class Graph_Algo implements graph_algorithms,Serializable
 		{    
 			FileOutputStream file = new FileOutputStream(file_name); 
 			ObjectOutputStream output = new ObjectOutputStream(file); 
-			output.writeObject(graph);  
+			output.writeObject(_graph);  
 			output.close(); 
 			file.close(); 
 		}   
@@ -71,10 +71,10 @@ public class Graph_Algo implements graph_algorithms,Serializable
 	@Override
 	public boolean isConnected() 
 	{
-		if(graph.nodeSize()<=1)	return true;
-		Queue<Node> queue = new ArrayBlockingQueue<Node>(graph.nodeSize());
+		if(_graph.nodeSize()<=1)	return true;
+		Queue<Node> queue = new ArrayBlockingQueue<Node>(_graph.nodeSize());
 		reset_tags();
-		for (node_data node : graph.getV() ) 
+		for (node_data node : _graph.getV() ) 
 		{
 			Node my_node = (Node) node;
 			if (my_node.sides.values()== null) return false;
@@ -84,7 +84,7 @@ public class Graph_Algo implements graph_algorithms,Serializable
 			{
 				for (edge_data edge : queue .peek().sides.values()) 
 				{
-					Node destination = (Node) graph.getNode(edge.getDest());
+					Node destination = (Node) _graph.getNode(edge.getDest());
 					if(destination.getTag()==0) 
 					{
 						destination.setTag(1);
@@ -93,7 +93,7 @@ public class Graph_Algo implements graph_algorithms,Serializable
 				}
 				queue .remove();
 			} 
-			for (node_data nodes : graph.getV()) 
+			for (node_data nodes : _graph.getV()) 
 			{
 				if (nodes.getTag()==0) return false;
 				else nodes.setTag(0);
@@ -106,26 +106,26 @@ public class Graph_Algo implements graph_algorithms,Serializable
 	{
 		if(source==destination)	return 0;
 		String info = "";
-		for (node_data nodes : graph.getV()) 
+		for (node_data nodes : _graph.getV()) 
 		{
 			nodes.setWeight(Double.POSITIVE_INFINITY);
 			nodes.setTag(0);
 		}
-		graph.getNode(source).setWeight(0);
+		_graph.getNode(source).setWeight(0);
 		recursive_shortestPathDist(source, destination, info);
-		return graph.getNode(destination).getWeight();
+		return _graph.getNode(destination).getWeight();
 	}
 	private void recursive_shortestPathDist(int src, int dest, String info) 
 	{
-		if(graph.getNode(src).getTag() == 1 && graph.getNode(src) == graph.getNode(dest)) return;
-		for (edge_data edge : graph.getE(src)) 
+		if(_graph.getNode(src).getTag() == 1 && _graph.getNode(src) == _graph.getNode(dest)) return;
+		for (edge_data edge : _graph.getE(src)) 
 		{
-			double weight = edge.getWeight() + graph.getNode(edge.getSrc()).getWeight();
-			double current_weight = graph.getNode(edge.getDest()).getWeight();
+			double weight = edge.getWeight() + _graph.getNode(edge.getSrc()).getWeight();
+			double current_weight = _graph.getNode(edge.getDest()).getWeight();
 			if(weight < current_weight) {
-				graph.getNode(edge.getDest()).setWeight(weight);
-				graph.getNode(edge.getDest()).setInfo(info + "->" + src);
-				graph.getNode(edge.getSrc()).setTag(1);
+				_graph.getNode(edge.getDest()).setWeight(weight);
+				_graph.getNode(edge.getDest()).setInfo(info + "->" + src);
+				_graph.getNode(edge.getSrc()).setTag(1);
 				recursive_shortestPathDist(edge.getDest(), dest, info + "->" + src);
 			}	
 		}
@@ -135,11 +135,11 @@ public class Graph_Algo implements graph_algorithms,Serializable
 	{
 		if(shortestPathDist(src, dest) == Double.POSITIVE_INFINITY)	return null;
 		List<node_data> answer = new ArrayList<>();
-		String str = graph.getNode(dest).getInfo();
+		String str = _graph.getNode(dest).getInfo();
 		str = str.substring(2);
 		String[] arr =str.split("->");
-		for (int i = 0; i < arr.length; i++) answer.add(graph.getNode(Integer.parseInt(arr[i])));
-		answer.add(graph.getNode(dest));
+		for (int i = 0; i < arr.length; i++) answer.add(_graph.getNode(Integer.parseInt(arr[i])));
+		answer.add(_graph.getNode(dest));
 		return answer;
 	}
 	@Override
@@ -147,7 +147,7 @@ public class Graph_Algo implements graph_algorithms,Serializable
 	{
 		if(targets.isEmpty()) return null;
 		List<node_data> targetsToNode = new ArrayList<>();
-		for(Integer tar : targets) if(!(targetsToNode.contains(graph.getNode(tar)))) targetsToNode.add(graph.getNode(tar));
+		for(Integer tar : targets) if(!(targetsToNode.contains(_graph.getNode(tar)))) targetsToNode.add(_graph.getNode(tar));
 		if(targets.size()==1) return targetsToNode;
 		Queue<Node> queue = new ArrayBlockingQueue<Node>(targets.size());
 		for (node_data nodes : targetsToNode) nodes.setTag(0);
@@ -161,7 +161,7 @@ public class Graph_Algo implements graph_algorithms,Serializable
 			{
 				for (edge_data edge : queue.peek().sides.values()) 
 				{
-					Node destination = (Node) graph.getNode(edge.getDest());
+					Node destination = (Node) _graph.getNode(edge.getDest());
 					if(destination.getTag()==0) 
 					{
 						destination.setTag(1);
@@ -203,10 +203,10 @@ public class Graph_Algo implements graph_algorithms,Serializable
 		save(file_to_copy);
 		Graph_Algo newGraph =new Graph_Algo();
 		newGraph.init(file_to_copy);
-		return newGraph.graph;
+		return newGraph._graph;
 	}
 	private void reset_tags() 
 	{
-		for (node_data nodes : graph.getV()) nodes.setTag(0);
+		for (node_data nodes : _graph.getV()) nodes.setTag(0);
 	}
 }

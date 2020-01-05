@@ -2,7 +2,7 @@ package Tests;
 import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.Test;
 import dataStructure.DGraph;
-import dataStructure.Node;
+import elements.Node;
 import utils.Point3D;
 
 class DGraphTest 

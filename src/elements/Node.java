@@ -1,7 +1,10 @@
-package dataStructure;
+package elements;
 import java.io.Serializable;
 import java.util.HashMap;
 import java.util.Iterator;
+
+import dataStructure.edge_data;
+import dataStructure.node_data;
 import utils.Point3D;
 
 public class Node implements node_data, Serializable

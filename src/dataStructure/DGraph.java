@@ -4,6 +4,9 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Iterator;
 
+import elements.Edge;
+import elements.Node;
+
 public class DGraph implements Serializable,graph 
 {
 	private static final long serialVersionUID = 1L;
